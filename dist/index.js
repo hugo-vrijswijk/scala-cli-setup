@@ -138,13 +138,26 @@ function run() {
             }));
             yield core.group('Install Apps', () => __awaiter(this, void 0, void 0, function* () {
                 const apps = core.getInput('apps').split(' ');
-                apps.push(`scala-cli:${scalaCLIVersion}`);
+                const scalaCLIVersionInput = core.getInput('scala-cli-version');
+                let version;
+                if (scalaCLIVersionInput) {
+                    if (scalaCLIVersionInput === 'latest') {
+                        version = '';
+                    }
+                    else {
+                        version = scalaCLIVersionInput;
+                    }
+                }
+                else {
+                    version = scalaCLIVersion;
+                }
+                apps.push(`scala-cli${version ? `:${version}` : ''}`);
                 if (apps.length) {
                     const coursierBinDir = path.join(os.homedir(), 'cs', 'bin');
                     core.exportVariable('COURSIER_BIN_DIR', coursierBinDir);
                     core.addPath(coursierBinDir);
                     yield cs('install', '--contrib', ...apps);
-                    core.setOutput('scala-cli-version', scalaCLIVersion);
+                    core.setOutput('scala-cli-version', yield execOutput('scala-cli', 'version'));
                 }
             }));
         }
