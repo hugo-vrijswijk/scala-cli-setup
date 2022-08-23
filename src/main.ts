@@ -115,7 +115,10 @@ async function run(): Promise<void> {
         core.exportVariable('COURSIER_BIN_DIR', coursierBinDir)
         core.addPath(coursierBinDir)
         await cs('install', '--contrib', ...apps)
-        core.setOutput('scala-cli-version', await execOutput('scala-cli', 'version'))
+        core.setOutput(
+          'scala-cli-version',
+          await execOutput('scala-cli', 'version', '--cli-version'),
+        )
       }
     })
   } catch (error: any) {
