@@ -44,7 +44,9 @@ const core = __importStar(__nccwpck_require__(2186));
 const os = __importStar(__nccwpck_require__(2037));
 const path = __importStar(__nccwpck_require__(1017));
 const tc = __importStar(__nccwpck_require__(7784));
-const csVersion = '2.1.0-M5';
+let csVersion = core.getInput('version');
+if (!csVersion)
+    csVersion = '2.1.0-M6-49-gff26f8e39';
 const scalaCLIVersion = '0.1.14';
 const coursierVersionSpec = csVersion;
 function execOutput(cmd, ...args) {
@@ -141,7 +143,8 @@ function run() {
                 }
             }));
             yield core.group('Install Apps', () => __awaiter(this, void 0, void 0, function* () {
-                const apps = core.getInput('apps').split(' ');
+                const value = core.getInput('apps').trim();
+                const apps = value.split(' ');
                 const scalaCLIVersionInput = core.getInput('scala-cli-version');
                 let version;
                 if (scalaCLIVersionInput) {
@@ -156,7 +159,7 @@ function run() {
                     version = scalaCLIVersion;
                 }
                 apps.push(`scala-cli${version ? `:${version}` : ''}`);
-                if (apps.length) {
+                if (value && apps.length) {
                     const coursierBinDir = path.join(os.homedir(), 'cs', 'bin');
                     core.exportVariable('COURSIER_BIN_DIR', coursierBinDir);
                     core.addPath(coursierBinDir);
