@@ -5,7 +5,7 @@ import * as path from 'path'
 import * as tc from '@actions/tool-cache'
 
 let csVersion = core.getInput('version')
-if (!csVersion) csVersion = '2.1.0-M6-49-gff26f8e39'
+if (!csVersion) csVersion = '2.1.0-M7-39-gb8f3d7532'
 const scalaCLIVersion = '0.1.17'
 
 const coursierVersionSpec = csVersion
@@ -124,8 +124,9 @@ async function run(): Promise<void> {
         )
       }
     })
-  } catch (error: any) {
-    core.setFailed(error.message)
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error)
+    core.setFailed(msg)
   }
 }
 
