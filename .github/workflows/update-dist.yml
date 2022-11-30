@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.SCALA_CLI_SETUP_INTERNAL_KEY }}
       - run: npm install
       - run: npm run all
       - name: Create Pull Request
