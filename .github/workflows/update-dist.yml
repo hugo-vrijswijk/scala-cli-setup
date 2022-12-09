@@ -11,8 +11,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ssh-key: ${{ secrets.SCALA_CLI_SETUP_INTERNAL_KEY }}
-      - run: npm install
-      - run: npm run all
+      - name: Build
+        shell: bash -l {0}
+        run: |
+          nvm use lts/gallium
+          npm install
+          npm run all
+
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v4
@@ -21,6 +26,7 @@ jobs:
           author: GitHub <noreply@github.com>
           delete-branch: true
           title: Update dist
+
       - name: Check Pull Request
         run: |
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"

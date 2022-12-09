@@ -46,7 +46,7 @@ const path = __importStar(__nccwpck_require__(1017));
 const tc = __importStar(__nccwpck_require__(7784));
 let csVersion = core.getInput('version');
 if (!csVersion)
-    csVersion = '2.1.0-M6-49-gff26f8e39';
+    csVersion = '2.1.0-M7-39-gb8f3d7532';
 const scalaCLIVersion = '0.1.18';
 const coursierVersionSpec = csVersion;
 function execOutput(cmd, ...args) {
@@ -169,7 +169,8 @@ function run() {
             }));
         }
         catch (error) {
-            core.setFailed(error.message);
+            const msg = error instanceof Error ? error.message : String(error);
+            core.setFailed(msg);
         }
     });
 }
