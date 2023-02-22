@@ -6,7 +6,7 @@ import * as tc from '@actions/tool-cache'
 
 let csVersion = core.getInput('version')
 if (!csVersion) csVersion = '2.1.0-M7-39-gb8f3d7532'
-const scalaCLIVersion = '0.1.20'
+const scalaCLIVersion = '0.2.0'
 
 const coursierVersionSpec = csVersion
 
@@ -122,6 +122,13 @@ async function run(): Promise<void> {
           'scala-cli-version',
           await execOutput('scala-cli', 'version', '--cli-version'),
         )
+      }
+    })
+    await core.group('Config --power', async () => {
+      const powerInput = core.getInput('power').trim()
+      const isPower = powerInput === 'true'
+      if (isPower) {
+        await execOutput('scala-cli', 'config', 'power', 'true')
       }
     })
   } catch (error: unknown) {
